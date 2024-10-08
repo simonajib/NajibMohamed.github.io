@@ -195,35 +195,35 @@
         });
 
 
-        /***MAIL SCRIPT***/ // Upadted in V. 1.1
-        $(document).ready(function () {
-    $('form#contact-form').on('submit', function (e) {
-        e.preventDefault(); // Prevents default submit
-        var form = $(this);
-        $("#submit").attr('disabled', 'disabled'); // Disable the submit button on click
-        var post_data = form.serialize(); // Serialize the form data
+       /***MAIL SCRIPT***/ // Upadted in V. 1.1
+        $('form#contact-form').on('submit', function (e) {
+            e.preventDefault(); //Prevents default submit
+            var form = $(this);
+            $("#submit").attr('disabled', 'disabled'); //Disable the submit button on click
+            var post_data = form.serialize(); //Serialized the form data 
+            $('div#form-loader').removeClass('is-hidden').fadeIn(500);
+            $.ajax({
+                type: 'POST',
+                url: 'php/mail_handler.php', // Form script
+                data: post_data
+            })
+                .done(function () {
+                    $('div#form-loader').fadeOut(500);
+                    Materialize.toast('Message Sent! I will contact you shortly, Thanks', 4000);
+                    $("form#contact-form")[0].reset();
+                    Materialize.updateTextFields(); // Rest floating labels
+                    $("#submit").removeAttr('disabled', 'disabled'); // Enable submit button
 
-        $('div#form-loader').removeClass('is-hidden').fadeIn(500); // Show loader
-        $.ajax({
-            type: 'POST',
-            url: 'php/mail_handler.php', // Form script URL
-            data: post_data
-        })
-        .done(function (response) {
-            $('div#form-loader').fadeOut(500); // Hide loader
-            Materialize.toast('Message Sent! I will contact you shortly, Thanks', 4000);
-            form[0].reset(); // Reset the form
-            Materialize.updateTextFields(); // Reset floating labels
-            $("#submit").removeAttr('disabled'); // Enable submit button
-        })
-        .fail(function (error) {
-            $('div#form-loader').fadeOut(500); // Hide loader
-            Materialize.toast('Sorry! Something went wrong, please try again.', 4000);
-            $("#submit").removeAttr('disabled'); // Enable submit button
+                })
+                .fail(function () {
+                    $('div#form-loader').fadeOut(500);
+                    Materialize.toast('Sorry! Something Wrong, Try Again', 4000);
+                    $("#submit").removeAttr('disabled', 'disabled'); // Enable submit button
+                });
         });
-    });
-});
 
+
+    });
 
     jQuery(window).load(function () {
 
